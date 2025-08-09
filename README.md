@@ -5,18 +5,36 @@
 ---
 # Content
 - [About the project](#About-the-project)
-- History the project
 - [Examples](#Examples)
 - Download
 
 # About the project
-IC32 is a library for developing console programs in the C++ programming language. This library contains all the tools to create a console program for Irion OS
+IC32 is a library written in NASM for developing programs for Irion OS. The library allows you to write a program in NASM for Irion OS
 
 # Examples
-``` cpp
-#include "ic32.h"
+``` asm
+[BITS 16]
+[ORG 800h]
 
-void main() {
-    print("Hello, world!", VGA_GREEN);
-}
+jmp start
+
+%include "lib/ic32.inc"
+%include "lib/utils.inc"
+
+start:
+    pusha
+    mov ax, 0x03
+    int 0x10
+    popa
+
+    mov dl, 0 
+    mov dh, 0
+    call set_cursor_pos
+
+    mov si, text
+    call print_string
+
+text db "Hello, world!", 0
 ```
+# Result
+<img src="testprog.png">
